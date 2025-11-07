@@ -1,0 +1,28 @@
+{
+    "name": "elielweb/module-catalog-enhancer",
+    "description": "Magento 2.4.8 module to enhance category features (pictogram, mobile image, landing URL).",
+    "type": "magento2-module",
+    "license": [
+        "proprietary"
+    ],
+    "authors": [
+        {
+            "name": "ElielWeb Team",
+            "email": "elie@redline.paris"
+        }
+    ],
+    "require": {
+        "php": "^8.3 || ^8.4",
+        "magento/framework": "~103.0.5",
+        "magento/module-catalog": "~104.0.5",
+        "magento/module-theme": "~103.0.5"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "ElielWeb\\CatalogEnhancer\\": ""
+        }
+    }
+}
