@@ -1,0 +1,62 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * ElielWeb CatalogEnhancer - Menu Pictograms Template
+ *
+ * Hyva-compatible template (vanilla JS, no jQuery dependency).
+ * Injects pictogram images into navigation menu items.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \ElielWeb\CatalogEnhancer\ViewModel\CategoryAttributes $viewModel
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+/** @var \ElielWeb\CatalogEnhancer\ViewModel\CategoryAttributes $viewModel */
+$viewModel = $block->getData('view_model');
+$pictograms = $viewModel->getMenuPictograms();
+
+if (empty($pictograms)) {
+    return;
+}
+?>
+<style>
+    .menu-picto {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 4px;
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+    }
+</style>
+<script>
+    'use strict';
+    (function () {
+        var pictograms = <?= /* @noEscape */ json_encode($pictograms, JSON_THROW_ON_ERROR) ?>;
+        function injectPictograms() {
+            Object.keys(pictograms).forEach(function (catId) {
+                var imgUrl = pictograms[catId];
+                var menuItem = document.querySelector(
+                    '.category-item-' + catId + ' > a, ' +
+                    '[data-category-id="' + catId + '"] > a'
+                );
+                if (menuItem && !menuItem.querySelector('.menu-picto')) {
+                    var img = document.createElement('img');
+                    img.className = 'menu-picto';
+                    img.src = imgUrl;
+                    img.alt = '';
+                    img.loading = 'lazy';
+                    img.width = 20;
+                    img.height = 20;
+                    menuItem.prepend(img);
+                }
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', injectPictograms);
+        } else {
+            injectPictograms();
+        }
+    })();
+</script>
