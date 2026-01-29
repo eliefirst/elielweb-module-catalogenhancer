@@ -17,13 +17,14 @@ use Magento\Framework\Data\Tree\Node;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Escaper;
 
 class Topmenu
 {
     public function __construct(
-        private CategoryRepositoryInterface $categoryRepository,
-        private StoreManagerInterface $storeManager,
-        private UrlInterface $urlBuilder
+        private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly Escaper $escaper
     ) {}
 
     /**
@@ -31,9 +32,9 @@ class Topmenu
      */
     public function beforeGetHtml(
         MagentoTopmenu $subject,
-        $outermostClass = '',
-        $childrenWrapClass = '',
-        $limit = 0
+        string $outermostClass = '',
+        string $childrenWrapClass = '',
+        int $limit = 0
     ): array {
         $menuTree = $subject->getMenu()->getChildren();
         foreach ($menuTree as $node) {
@@ -53,14 +54,19 @@ class Topmenu
         }
 
         try {
-            $category = $this->categoryRepository->get($categoryId, $this->storeManager->getStore()->getId());
-            $pictogram = $category->getData('menu_pictogram_image');
-            if ($pictogram) {
-                $imgUrl = $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA])
-                    . 'catalog/category/' . $pictogram;
+            $storeId = (int) $this->storeManager->getStore()->getId();
+            $category = $this->categoryRepository->get((int) $categoryId, $storeId);
+            $pictogram = $this->resolvePictogramFilename($category->getData('menu_pictogram_image'));
+
+            if ($pictogram !== null) {
+                $baseMediaUrl = $this->storeManager->getStore()
+                    ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+                $imgUrl = $baseMediaUrl . 'catalog/category/' . $pictogram;
+                $escapedUrl = $this->escaper->escapeUrl($imgUrl);
 
                 $node->setName(
-                    '<img class="menu-picto" src="' . $imgUrl . '" alt="" /> ' . $node->getName()
+                    '<img class="menu-picto" src="' . $escapedUrl . '" alt="" loading="lazy" width="20" height="20" /> '
+                    . $node->getName()
                 );
             }
         } catch (\Exception $e) {
@@ -70,5 +76,21 @@ class Topmenu
         foreach ($node->getChildren() as $childNode) {
             $this->attachCategoryPictogram($childNode);
         }
+    }
+
+    /**
+     * Resolve pictogram filename from attribute value (string or array from image uploader)
+     */
+    private function resolvePictogramFilename(mixed $value): ?string
+    {
+        if (is_string($value) && $value !== '') {
+            return $value;
+        }
+
+        if (is_array($value) && isset($value[0]['name']) && $value[0]['name'] !== '') {
+            return (string) $value[0]['name'];
+        }
+
+        return null;
     }
 }

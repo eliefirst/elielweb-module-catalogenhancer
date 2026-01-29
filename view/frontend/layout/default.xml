@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * ElielWeb CatalogEnhancer - Frontend layout
+ * Registers CategoryAttributes ViewModel for Hyva theme compatibility
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="header.container">
+            <block name="elielweb.category.pictograms"
+                   template="ElielWeb_CatalogEnhancer::category/menu-pictograms.phtml"
+                   after="-">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">ElielWeb\CatalogEnhancer\ViewModel\CategoryAttributes</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
