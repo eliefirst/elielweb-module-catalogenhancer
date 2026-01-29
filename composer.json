@@ -12,10 +12,10 @@
         }
     ],
     "require": {
-        "php": "^8.3 || ^8.4",
-        "magento/framework": "~103.0.5",
-        "magento/module-catalog": "~104.0.5",
-        "magento/module-theme": "~103.0.5"
+        "php": "^8.1 || ^8.2 || ^8.3 || ^8.4",
+        "magento/framework": ">=103.0.0",
+        "magento/module-catalog": ">=104.0.0",
+        "magento/module-theme": ">=101.0.0"
     },
     "autoload": {
         "files": [
