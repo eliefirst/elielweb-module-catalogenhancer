@@ -7,7 +7,7 @@ Module Magento 2.4.8 pour enrichir les catégories :
 - Traductions multi-langues (FR, EN, ES, JA, RU, ZH).
 
 ### Compatibilité
-- Magento ≥ 2.4.8-p2  
+- Magento ≥ 2.4.8-p3 
 - PHP ≥ 8.3 / 8.4
 
 ### Installation
