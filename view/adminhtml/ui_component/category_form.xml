@@ -68,6 +68,19 @@
 
     <!-- SEO: blocs #1 et #2 -->
     <fieldset name="search_engine_optimization">
+        <!-- LANDING URL -->
+        <field name="landing_url">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">11</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">[LANDING] URL alternative</item>
+                    <item name="required" xsi:type="boolean">false</item>
+                    <item name="notice" xsi:type="string" translate="true">URL WordPress/CMS pour landing page alternative</item>
+                </item>
+            </argument>
+        </field>
         <field name="seo_uptitle_1">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
